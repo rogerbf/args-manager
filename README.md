@@ -1,6 +1,6 @@
 # args-manager
 
-Manages key/value-pair arguments.
+Manage application arguments.
 
 ## usage
 
