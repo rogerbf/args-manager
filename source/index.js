@@ -1,8 +1,6 @@
 import add from './library/add'
 import build from './library/build'
 import clear from './library/clear'
-// import load from './library/load'
-// import save from './library/save'
 
 export default function createManager (state = {}) {
   if (!state.hasOwnProperty(`args`)) { Object.assign(state, { args: [] }) }
@@ -16,7 +14,5 @@ export default function createManager (state = {}) {
     add(state),
     build(state),
     clear(state),
-    // load(state),
-    // save(state),
   )
 }

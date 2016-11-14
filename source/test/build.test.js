@@ -17,6 +17,17 @@ test(`default builder`, assert => {
   assert.end()
 })
 
+test(`default builder mixed types`, assert => {
+  const state = {
+    args: [{ SocksPort: 9050 }, `testing`, { ControlPort: 9051, SocksPort: 8080 }, 42]
+  }
+  const builder = build(state)
+  const actual = builder.build()
+  const expected = [`SocksPort`, `9050`, `testing`, `ControlPort`, `9051`, `SocksPort`, `8080`, `42`]
+  assert.deepEqual(actual, expected)
+  assert.end()
+})
+
 test(`custom builder`, assert => {
   const state = {
     args: [{ SocksPort: 9050 }, { ControlPort: 9051, SocksPort: 8080 }],
