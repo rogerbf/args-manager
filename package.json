@@ -42,5 +42,13 @@
     "distribution",
     "README.md"
   ],
-  "dependencies": {}
+  "dependencies": {},
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/rogerbf/args-manager.git"
+  },
+  "bugs": {
+    "url": "https://github.com/rogerbf/args-manager/issues"
+  },
+  "homepage": "https://github.com/rogerbf/args-manager#readme"
 }
