@@ -1,0 +1,9 @@
+node_modules
+distribution
+.DS_Store
+package
+argument-store*.tgz
+npm-debug.log
+NOTES
+.nyc_output
+coverage
