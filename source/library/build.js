@@ -5,9 +5,9 @@ export default state => ({
     } else {
       return state.args.reduce((argsStr, obj) => {
         return argsStr.concat(Object.keys(obj).reduce((str, key) => {
-          return str.concat(`--${key} ${obj[key]} `)
+          return str.concat(`${key} ${obj[key]} `)
         }, ``))
-      }, ``).trim()
+      }, ``).trim().split(` `)
     }
   }
 })

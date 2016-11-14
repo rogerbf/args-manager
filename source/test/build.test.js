@@ -12,8 +12,8 @@ test(`default builder`, assert => {
   }
   const builder = build(state)
   const actual = builder.build()
-  const expected = `--SocksPort 9050 --ControlPort 9051 --SocksPort 8080`
-  assert.equal(actual, expected)
+  const expected = [`SocksPort`, `9050`, `ControlPort`, `9051`, `SocksPort`, `8080`]
+  assert.deepEqual(actual, expected)
   assert.end()
 })
 
