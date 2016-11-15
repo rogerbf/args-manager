@@ -9,10 +9,11 @@ export default function createManager (state = {}) {
   }
   if (!state.hasOwnProperty(`valid`)) { Object.assign(state, { valid: undefined }) }
 
+  const builder = build(state)
+
   return Object.assign(
-    () => state.args,
+    () => builder.build(),
     add(state),
-    build(state),
     clear(state),
   )
 }

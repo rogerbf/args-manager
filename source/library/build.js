@@ -11,7 +11,7 @@ export default state => ({
             return str.concat(`${key} ${obj[key]} `)
           }, ``))
         }
-      }, ``).trim().split(` `)
+      }, ``).split(` `).filter(arg => arg.length > 0)
     }
   }
 })

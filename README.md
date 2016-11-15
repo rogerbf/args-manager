@@ -1,6 +1,6 @@
 # args-manager
 
-Manage application arguments.
+Manage arguments sent to `child_process`.
 
 ## usage
 
@@ -11,7 +11,7 @@ const args = argsman()
 args.add({ SocksPort: 9050 })
 args.add({ ControlPort: 9055 })
 args.add(`--hush`)
-args.build()
+args()
 // [`SocksPort`, `9050`, `ControlPort`, `9055`, `--hush`]
 ```
 

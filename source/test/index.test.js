@@ -12,7 +12,6 @@ test(`createManager() and returned value`, assert => {
   assert.test(`properties`, assert => {
     assert.deepEqual(args(), [], `calling returns an array`)
     assert.ok(args.hasOwnProperty(`add`), `it has a method: add`)
-    assert.ok(args.hasOwnProperty(`build`), `it has a method: build`)
     assert.ok(args.hasOwnProperty(`clear`), `it has a method: clear`)
     assert.end()
   })
@@ -29,13 +28,13 @@ test(`state.allowed - wrong type`, assert => {
 
 test(`init with args`, assert => {
   const args = createManager({ args: [{ metric: `superior` }] })
-  const expected = [{ metric: `superior` }]
+  const expected = [`metric`, `superior`]
   const actual = args()
   assert.deepEqual(actual, expected)
   assert.end()
 })
 
-test(`init, add, build, clear`, assert => {
+test(`init, add, clear, custom builder`, assert => {
   const args = createManager({
     builder: (args) => {
       return args.reduce((argObj, obj) => {
@@ -49,16 +48,17 @@ test(`init, add, build, clear`, assert => {
   args.add({ ControlPort: 8080 })
   args.add({ SocksPort: 7070, HashedPassword: `ff00` })
 
-  const expectedArgsArr = [
-    { SocksPort: 9095 },
-    { ControlPort: 8080 },
-    { SocksPort: 7070, HashedPassword: `ff00` }
-  ]
-
-  assert.deepEqual(args(), expectedArgsArr)
+  // const expectedArgsArr = [
+  //   `SocksPort`, `9095`,
+  //   `ControlPort`, `8080`,
+  //   `SocksPort`, `7070`,
+  //   `HashedPassword`, `ff00`
+  // ]
+  //
+  // assert.deepEqual(args(), expectedArgsArr)
 
   const expectedA = { SocksPort: 7070, ControlPort: 8080, HashedPassword: `ff00` }
-  assert.deepEqual(args.build(), expectedA)
+  assert.deepEqual(args(), expectedA)
 
   args.clear()
   const expectedB = {}
@@ -75,10 +75,8 @@ test(`add mixed string/object`, assert => {
   args.add(`hello`)
   assert.deepEqual(args(), [`hello`])
   args.add({ there: `is here` })
-  assert.deepEqual(args(), [`hello`, { there: `is here` }])
-  assert.deepEqual(args.build(), [`hello`, `there`, `is`, `here`])
+  assert.deepEqual(args(), [`hello`, `there`, `is`, `here`])
   args.add(42)
-  assert.deepEqual(args(), [`hello`, { there: `is here` }, 42])
-  assert.deepEqual(args.build(), [`hello`, `there`, `is`, `here`, `42`])
+  assert.deepEqual(args(), [`hello`, `there`, `is`, `here`, `42`])
   assert.end()
 })
