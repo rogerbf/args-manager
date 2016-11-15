@@ -13,6 +13,9 @@ args.add({ ControlPort: 9055 })
 args.add(`--hush`)
 args()
 // [`SocksPort`, `9050`, `ControlPort`, `9055`, `--hush`]
+args.clear()
+args()
+// []
 ```
 
 ## options
