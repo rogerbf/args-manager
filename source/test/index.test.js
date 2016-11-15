@@ -48,15 +48,6 @@ test(`init, add, clear, custom builder`, assert => {
   args.add({ ControlPort: 8080 })
   args.add({ SocksPort: 7070, HashedPassword: `ff00` })
 
-  // const expectedArgsArr = [
-  //   `SocksPort`, `9095`,
-  //   `ControlPort`, `8080`,
-  //   `SocksPort`, `7070`,
-  //   `HashedPassword`, `ff00`
-  // ]
-  //
-  // assert.deepEqual(args(), expectedArgsArr)
-
   const expectedA = { SocksPort: 7070, ControlPort: 8080, HashedPassword: `ff00` }
   assert.deepEqual(args(), expectedA)
 
