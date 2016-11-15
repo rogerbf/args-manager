@@ -12,7 +12,7 @@ test(`default builder`, assert => {
   }
   const builder = build(state)
   const actual = builder.build()
-  const expected = [`SocksPort`, `9050`, `ControlPort`, `9051`, `SocksPort`, `8080`]
+  const expected = [`SocksPort`, 9050, `ControlPort`, 9051, `SocksPort`, 8080]
   assert.deepEqual(actual, expected)
   assert.end()
 })
@@ -23,7 +23,7 @@ test(`default builder mixed types`, assert => {
   }
   const builder = build(state)
   const actual = builder.build()
-  const expected = [`SocksPort`, `9050`, `testing`, `ControlPort`, `9051`, `SocksPort`, `8080`, `42`]
+  const expected = [`SocksPort`, 9050, `testing`, `ControlPort`, 9051, `SocksPort`, 8080, 42]
   assert.deepEqual(actual, expected)
   assert.end()
 })

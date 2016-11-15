@@ -3,15 +3,18 @@ export default state => ({
     if (state.builder) {
       return state.builder(state.args)
     } else {
-      return state.args.reduce((argsStr, obj) => {
-        if (typeof (obj) !== `object`) {
-          return argsStr.concat(`${obj} `)
+      return state.args.reduce((consolidated, obj) => {
+        if (typeof (obj) === `object`) {
+          return [
+            ...consolidated,
+            ...Object.keys(obj).reduce((acc, key) => {
+              return [ ...acc, key, obj[key] ]
+            }, [])
+          ]
         } else {
-          return argsStr.concat(Object.keys(obj).reduce((str, key) => {
-            return str.concat(`${key} ${obj[key]} `)
-          }, ``))
+          return [ ...consolidated, obj ]
         }
-      }, ``).split(` `).filter(arg => arg.length > 0)
+      }, [])
     }
   }
 })
