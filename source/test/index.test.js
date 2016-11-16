@@ -1,73 +1,106 @@
 import test from 'tape'
 import createManager from '../index'
 
-test(`{ createManager }`, assert => {
-  assert.equal(typeof (createManager), `function`, `it is a function`)
+test(`createManager is a function`, assert => {
+  assert.equal(typeof (createManager), `function`)
   assert.end()
 })
 
-test(`createManager() and returned value`, assert => {
+test(`createManager()`, assert => {
   const args = createManager()
-  assert.equal(typeof (args), `function`, `it returns a function`)
-  assert.test(`properties`, assert => {
-    assert.deepEqual(args(), [], `calling returns an array`)
-    assert.ok(args.hasOwnProperty(`add`), `it has a method: add`)
-    assert.ok(args.hasOwnProperty(`clear`), `it has a method: clear`)
-    assert.end()
-  })
-  assert.end()
-})
 
-test(`state.allowed - wrong type`, assert => {
-  assert.throws(createManager.bind(null, { valid: `` }))
-  assert.throws(createManager.bind(null, { valid: {} }))
-  assert.throws(createManager.bind(null, { valid: 10 }))
-  assert.throws(createManager.bind(null, { valid: null }))
-  assert.end()
-})
+  assert.equal(typeof (args), `function`)
+  assert.equal(typeof (args.add), `function`)
+  assert.equal(typeof (args.clear), `function`)
 
-test(`init with args`, assert => {
-  const args = createManager({ args: [{ metric: `superior` }] })
-  const expected = [`metric`, `superior`]
-  const actual = args()
-  assert.deepEqual(actual, expected)
-  assert.end()
-})
+  args.add(`--hush`)
+  assert.deepEqual(args(), [ `--hush` ])
 
-test(`init, add, clear, custom builder`, assert => {
-  const args = createManager({
-    builder: (args) => {
-      return args.reduce((argObj, obj) => {
-        return Object.assign(argObj, obj)
-      }, {})
-    },
-    valid: [`SocksPort`, `ControlPort`, `HashedPassword`]
-  })
+  args.add({ SocksPort: 9050 })
+  assert.deepEqual(args(), [ `--hush`, `SocksPort`, 9050 ])
 
-  args.add({ SocksPort: 9095 })
-  args.add({ ControlPort: 8080 })
-  args.add({ SocksPort: 7070, HashedPassword: `ff00` })
-
-  const expectedA = { SocksPort: 7070, ControlPort: 8080, HashedPassword: `ff00` }
-  assert.deepEqual(args(), expectedA)
+  args.add([`--kv`, `key=value`])
+  assert.deepEqual(args(), [ `--hush`, `SocksPort`, 9050, `--kv`, `key=value` ])
 
   args.clear()
-  const expectedB = {}
-  assert.deepEqual(args(), expectedB)
-
-  assert.throws(args.add.bind(null, { testing: `a test` }))
+  assert.deepEqual(args(), [])
 
   assert.end()
 })
 
-test(`add mixed string/object`, assert => {
-  const args = createManager()
-  assert.deepEqual(args(), [])
-  args.add(`hello`)
-  assert.deepEqual(args(), [`hello`])
-  args.add({ there: `is here` })
-  assert.deepEqual(args(), [`hello`, `there`, `is here`])
-  args.add(42)
-  assert.deepEqual(args(), [`hello`, `there`, `is here`, 42])
+test(`createManager({ validArgs })`, assert => {
+  const args = createManager({ validArgs: [ `ControlPort`, `HidServAuth` ] })
+
+  assert.throws(args.add.bind(null, `invalidArg`))
+
+  args.add({ HidServAuth: `4lsysj239fg9sdva.onion CoPsZkTbUsTy20dQ7EHWaR` })
+  assert.deepEqual(
+    args(),
+    [ `HidServAuth`, `4lsysj239fg9sdva.onion CoPsZkTbUsTy20dQ7EHWaR` ]
+  )
+
+  args.add({ ControlPort: 9051 })
+  assert.deepEqual(
+    args(),
+    [ `HidServAuth`, `4lsysj239fg9sdva.onion CoPsZkTbUsTy20dQ7EHWaR`,
+      `ControlPort`, 9051 ]
+  )
+  assert.end()
+})
+
+test(`createManager({ validate })`, assert => {
+  const validate = (list, arg) => {
+    if (typeof (arg) !== `string`) {
+      throw new Error(`arg must be a string`)
+    } else {
+      return arg
+    }
+  }
+  const args = createManager({ validate })
+
+  args.add(`--Server`)
+  assert.deepEqual(args(), [ `--Server` ])
+
+  assert.throws(args.add.bind(null, { Port: 8080 }))
+
+  assert.end()
+})
+
+test(`createManager({ build })`, assert => {
+  const build = (args) => {
+    return args.map(arg => `--${arg}`)
+  }
+  const args = createManager({ build })
+
+  args.add(`server`)
+  args.add(`listen`)
+  assert.deepEqual(args(), [`--server`, `--listen`])
+
+  assert.end()
+})
+
+test(`createManager() throws`, assert => {
+  assert.throws(createManager.bind(null, ``))
+  assert.throws(createManager.bind(null, []))
+  assert.throws(createManager.bind(null, 42))
+
+  assert.throws(createManager.bind(null, { args: ` ` }))
+  assert.throws(createManager.bind(null, { args: {} }))
+  assert.throws(createManager.bind(null, { args: 10 }))
+
+  assert.throws(createManager.bind(null, { validArgs: ` ` }))
+  assert.throws(createManager.bind(null, { validArgs: {} }))
+  assert.throws(createManager.bind(null, { validArgs: 10 }))
+
+  assert.throws(createManager.bind(null, { build: ` ` }))
+  assert.throws(createManager.bind(null, { build: {} }))
+  assert.throws(createManager.bind(null, { build: [] }))
+  assert.throws(createManager.bind(null, { build: 10 }))
+
+  assert.throws(createManager.bind(null, { validate: ` ` }))
+  assert.throws(createManager.bind(null, { validate: {} }))
+  assert.throws(createManager.bind(null, { validate: [] }))
+  assert.throws(createManager.bind(null, { validate: 10 }))
+
   assert.end()
 })
