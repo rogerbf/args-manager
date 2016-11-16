@@ -1,10 +1,11 @@
 {
   "name": "args-manager",
-  "version": "1.0.0",
-  "description": "manage child_process arguments",
+  "version": "2.0.0",
+  "description": "manage arguments used in .spawn(), .execFile() and their siblings",
   "main": "./distribution/index.js",
   "scripts": {
     "test": "tape -r babel-register ./source/**/*.test.js | tap-dot",
+    "test:one": "tape -r babel-register $FILE | tap-dot",
     "prebuild": "npm test && rimraf distribution",
     "build": "cross-env BABEL_ENV=production babel --out-dir distribution source",
     "prepublish": "npm run snyk && npm run build",
@@ -18,7 +19,16 @@
     "test:coverage": "nyc --reporter=lcov --require babel-register npm test && nyc report",
     "watch:test:coverage": "onchange source/*.js source/**/*.js -- npm run test:coverage"
   },
-  "keywords": [],
+  "keywords": [
+    "spawn",
+    "spawnSync",
+    "execFile",
+    "execFileSync",
+    "fork",
+    "child_process",
+    "arguments",
+    "args"
+  ],
   "author": "rogerbf <roger@bergfalk.nu> (http://bergfalk.nu/)",
   "license": "MIT",
   "devDependencies": {
