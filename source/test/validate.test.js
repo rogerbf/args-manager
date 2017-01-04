@@ -30,7 +30,7 @@ test(`validate object (multiple keys)`, assert => {
 test(`validate invalid`, assert => {
   const validArgs = [`validarg1`, `validarg2`]
   const boundValidate = validate.bind(null, validArgs)
-  assert.throws(boundValidate.bind(null, `test`))
+  assert.throws(() => boundValidate(`test`))
   assert.equal(boundValidate(`validarg2`), `validarg2`)
   assert.end()
 })
