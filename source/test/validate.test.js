@@ -20,6 +20,13 @@ test(`validate object`, assert => {
   assert.end()
 })
 
+test(`validate object (multiple keys)`, assert => {
+  const arg = { SocksPort: 9050, ControlPort: 9055 }
+  const validArgs = [`SocksPort`, `ControlPort`]
+  assert.deepEqual(validate(validArgs, arg), arg)
+  assert.end()
+})
+
 test(`validate invalid`, assert => {
   const validArgs = [`validarg1`, `validarg2`]
   const boundValidate = validate.bind(null, validArgs)
