@@ -26,10 +26,11 @@ args()
 ```javascript
 const args = createManager({
   args: [`SocksPort`, 9050, { Lookout: `Thorofare` }],
-  validArgs: [
+  validArgs: (
     fs.execFileSync(`tor`, [`--list-torrc-options`])
-      .trim().split(`\n`)
-  ],
+    .trim()
+    .split(`\n`)
+  ),
   build: (args) => args,
   validate: (validArgs, arg) => {
     if (typeof (arg) === `string`) {
