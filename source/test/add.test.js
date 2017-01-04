@@ -51,8 +51,8 @@ test(`add object`, assert => {
     () => state.args,
     add(state)
   )
-  app.add({ SocksPort: 9050 })
-  const expected = [{ SocksPort: 9050 }]
+  app.add({ SocksPort: 9050, ControlPort: 9055 })
+  const expected = [{ SocksPort: 9050, ControlPort: 9055 }]
   const actual = app()
   assert.deepEqual(actual, expected)
   assert.end()
